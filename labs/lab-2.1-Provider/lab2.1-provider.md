@@ -19,7 +19,7 @@ touch main.tf
 
 Open the file for edit.  You can either use "vim" or you can use the built-in editor in the CloudShell".  To open the built-in editor, click the "Open Editor" icon (looks like curly braces) above the console area.  In the file editor, expand the directory tree on the left.
 
-Create a terraform block to specify that "random" is a required provider.  We also specify that we want to use version 0.13.0 or above for the Terraform version.
+Create a terraform block to specify that "random" is a required provider.  We also specify that we want to use version 1.0.0 or above for the Terraform version.
 
 ```
 terraform {
