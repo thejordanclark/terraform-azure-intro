@@ -14,11 +14,11 @@ terraform {
   required_providers {
     random = {
       source  = "hashicorp/random"
-      version = "~> 2.3.0"
+      version = "~> 3.6"
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 2.40, < 3.0"
+      version = "~> 3.86"
     }
   }
   backend "azurerm" {
@@ -26,7 +26,7 @@ terraform {
     container_name       = "tfstate"
     key                  = "cprime.terraform.labs.tfstate"
   }
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.3.0"
 }
 ```
 

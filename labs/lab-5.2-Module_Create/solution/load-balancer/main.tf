@@ -2,10 +2,10 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 2.40, < 3.0"
+      version = "~> 3.86"
     }
   }
-  required_version = ">= 1.0.0"
+  required_version = ">= 1.3.0"
 }
 
 resource "azurerm_public_ip" "lab-lb" {
