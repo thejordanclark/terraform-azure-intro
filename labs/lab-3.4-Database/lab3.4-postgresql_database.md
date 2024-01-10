@@ -36,6 +36,7 @@ resource "azurerm_postgresql_server" "lab" {
   storage_mb                       = 5120
   public_network_access_enabled    = true
   ssl_enforcement_enabled          = false
+  ssl_minimal_tls_version_enforced = "TLSEnforcementDisabled"
 
   administrator_login           = "psqladmin"
   administrator_login_password  = "AZtfl4b$"
