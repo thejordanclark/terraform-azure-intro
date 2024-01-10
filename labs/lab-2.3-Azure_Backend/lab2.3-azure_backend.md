@@ -32,10 +32,10 @@ We will be configuring a backend to store the terraform state in an Azure storag
 Edit “main.tf” to add a backend for Azure.  Add the following as a sub-block in the terraform block.  *Make sure you are putting the new code inside the terraform block and not at the end of the file or another arbitrary location.*
 
 ```
-  backend "azurerm" {
-    resource_group_name  = "terraform-course-backend"
-    container_name       = "tfstate"
-    key                  = "cprime.terraform.labs.tfstate"
+  cloud {
+    organization = "ABC-Labs"
+    workspaces {
+      name = "labs-XX"
   }
 ```
 
@@ -48,18 +48,26 @@ terraform {
       version = "~> 3.6"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "terraform-course-backend"
-    container_name       = "tfstate"
-    key                  = "cprime.terraform.labs.tfstate"
+  cloud {
+    organization = "ABC-Labs"
+    workspaces {
+      name = "labs-XX"
   }
   required_version = ">= 1.3.0"
 }
 ```
 
-This will now direct the state to be saved in Azure.  Since you changed the backend configuration, you will need to run terraform init again.
+This will now direct the state to be saved in Terraform Cloud.  Since you changed the backend configuration, you will need to run terraform init again, but before we can do that we need to authenticate `terraform` with Terraform Cloud. We can do that by running terraform login.
 
-A missing argument in the backend configuration above is the specification of an Azure storage account.  Terraform will therefore prompt you to enter the storage account name when you run terraform init.  The storage account name will be of the form `aztflabsbackendNN` where `NN` is your username sequence number.  For example, if your username for logging into Azure was "student05" then your sequence number would be "05" (from the end of the username) and the storage account name would be "aztflabsbackend05".
+Run:
+
+```
+terraform login
+```
+
+Follow the login instructions using the login information for TFC that the instructor provided.  The instruction will walk you through creating an access token for "terraform login".  You will copy that login token and provided it for terraform.  Once successfully logged in terraform will provide steps for an example configuration.  Skip that example as we will be building our own.
+
+Now that your terraform has access to TFC we can now run terraform init.
 
 Run:
 
@@ -67,17 +75,15 @@ Run:
 terraform init
 ```
 
-Terraform will prompt you for the storage account name. Type the name as per the instructions above.   
-
-> If you enter the wrong storage account name, you will get an error.  Unfortunately you will not be able to just re-run terraform init.  You must first remove the .terraform subdirectory by typing "rm -rf .terraform".  You can then re-run terraform init.
-
 Terraform will then prompt you to migrate the existing state from the “terraform.tfstate” file to the backend in Azure.
 
 Type “yes”
 
+_Note: the screenshot may not match exactly as it shows using Azure backend instead of TFC._
+
 ![Terraform init with remote backend](./images/tf-init.png "Terraform init with remote backend")
 
-Terraform will copy the state to Azure.  The state will be saved in a new Azure storage blob referenced in the backend configuration above.
+Terraform will copy the state to TFC.  The state will be saved in a new TFC storage blob referenced in the backend configuration above.
 
 Notice that the terraform.tfstate file is left remaining.  You should delete the file to avoid confusion.
 
@@ -92,3 +98,27 @@ terraform show
 ```
 
 ![Terraform remote state](./images/tf-remote-state.png "Terraform remote state")
+
+---
+
+By adding the Terraform Cloud section to the terraform block will now execute the plan and apply on TFC.  Running in the "Triggered via CLI" mode.  We now see that in the CLI when running terraform plan.
+
+Run:
+
+```
+terraform plan
+```
+
+Notice the "Running plan in Terraform Cloud".  The CLI even provides links to vew the run in TFC.  Will a browser connect to it to view the plan info in TFC.
+
+Now explore how the terraform apply is also run in TFC.
+
+Run:
+
+```
+terraform apply
+```
+
+If you are new to Terraform Cloud.  Explore the interface, try to understand the data represented.
+
+You may notice some variables set in your workspace.  Those variables that start with "ARM_" have been added to allow your TFC workspace to authenticate back to Azure to manage resources in your Azure subscription.

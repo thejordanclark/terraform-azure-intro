@@ -23,3 +23,11 @@ cd clouddrive
 You are now set to proceed with the labs for the class.
 
 :bangbang: NOTE: If the cloud shell times out (and it likely will between labs), then you will get a prompt to reconnect. After reconnecting, be sure to change to the clouddrive subdirectory again.
+
+---
+
+#### Terraform Cloud
+
+We will also be using Terraform Cloud in later labs.  The instructor should have sent you credentials to log in.
+
+Go to [https://apps.terraform.io](https://apps.terraform.io). You will be redirected to a login page for Terraform Cloud.

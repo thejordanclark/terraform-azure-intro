@@ -21,10 +21,11 @@ terraform {
       version = "~> 3.86"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "terraform-course-backend"
-    container_name       = "tfstate"
-    key                  = "cprime.terraform.labs.tfstate"
+  cloud {
+    organization = "ABC-Labs"
+    workspaces {
+      name = "labs-XX"
+    }
   }
   required_version = ">= 1.3.0"
 }
@@ -130,6 +131,8 @@ Run terraform apply to create all the new infrastructure.
 ```
 terraform apply
 ```
+
+Notice that you can approve the changes both from the terraform CLI and from the Terraform Cloud UI.  Compare both UIs notice how they interact.
 
 ### Viewing Results in the Azure Portal
 

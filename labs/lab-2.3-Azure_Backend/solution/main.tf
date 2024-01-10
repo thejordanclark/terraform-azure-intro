@@ -5,10 +5,11 @@ terraform {
       version = "~> 3.6"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "terraform-course-backend"
-    container_name       = "tfstate"
-    key                  = "cprime.terraform.labs.tfstate"
+  cloud {
+    organization = "ABC-Labs"
+    workspaces {
+      name = "labs-XX"
+    }
   }
   required_version = ">= 1.3.0"
 }

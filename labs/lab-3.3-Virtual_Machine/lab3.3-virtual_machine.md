@@ -86,6 +86,8 @@ Run terraform plan.  See that three new resources will be created.
 terraform plan
 ```
 
+Because we are adding a VM which adds some cost.  This would be a good example of one check out in Terraform Cloud.  Before confirming the find the "Cost estimation" on the run in TFC.
+
 Run terraform apply:
 ```
 terraform apply
