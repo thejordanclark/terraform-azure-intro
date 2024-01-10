@@ -42,13 +42,14 @@ module "database-server" {
   source  = "Azure/postgresql/azurerm"  #from Terraform registry
   version = "2.1.0"
 
-  location                = local.region
-  resource_group_name     = azurerm_resource_group.lab.name
-  server_name             = "aztf-labs-psqlserver-${random_integer.suffix.result}-mod"
-  sku_name                = "B_Gen5_1"
-  server_version          = "11"
-  storage_mb              = var.db_storage
-  ssl_enforcement_enabled = false
+ location                         = local.region
+  resource_group_name              = azurerm_resource_group.lab.name
+  server_name                      = "aztf-labs-psqlserver-${random_integer.suffix.result}-mod"
+  sku_name                         = "B_Gen5_1"
+  server_version                   = "11"
+  storage_mb                       = var.db_storage
+  ssl_enforcement_enabled          = false
+  ssl_minimal_tls_version_enforced = "TLSEnforcementDisabled"
 
   administrator_login     = "psqladmin"
   administrator_password  = azurerm_key_vault_secret.lab-db-pwd.value
