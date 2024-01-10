@@ -24,11 +24,11 @@ resource "azurerm_key_vault" "lab" {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azuread_group.lab.object_id
     secret_permissions = [
-      "get",
-      "set",
-      "delete",
-      "purge",
-      "list"
+      "Get",
+      "Set",
+      "Delete",
+      "Purge",
+      "List"
     ]
   }
 
