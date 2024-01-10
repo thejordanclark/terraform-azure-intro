@@ -31,7 +31,7 @@ resource "azurerm_postgresql_server" "lab" {
   location            = local.region
   resource_group_name = azurerm_resource_group.lab.name
 
- sku_name                         = "B_Gen5_1"
+  sku_name                         = "B_Gen5_1"
   version                          = "11"
   storage_mb                       = 5120
   public_network_access_enabled    = true
