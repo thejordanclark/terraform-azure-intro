@@ -17,7 +17,7 @@ resource "azurerm_network_interface" "lab-app" {
   ip_configuration {
     name                          = "labConfiguration"
     subnet_id                     = azurerm_subnet.lab-private.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
   }
 
   tags = local.common_tags
