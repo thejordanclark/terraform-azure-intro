@@ -52,6 +52,7 @@ terraform {
     organization = "ABC-Labs"
     workspaces {
       name = "labs-XX"
+    }
   }
   required_version = ">= 1.3.0"
 }
