@@ -4,9 +4,9 @@ output "bastion-vm-public-ip" {
 }
 
 output "db-server-endpoint" {
-  value = module.database-server.server_fqdn
+  value = azurerm_postgresql_server.lab.fqdn
 }
 
 output "load-balancer-public-ip" {
-  value = module.load-balancer.public_ip_address
+  value = azurerm_public_ip.lab-lb.ip_address
 }

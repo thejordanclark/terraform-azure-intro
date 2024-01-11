@@ -1,7 +1,7 @@
-# Calling a Module
+# Creating an Azure Redis Cache using Terraform Module
 
 Lab Objective:
-- Use a module to create a database
+- Utilize the Terraform module to create an Azure Redis Cache instance.
 
 ## Preparation
 
@@ -9,115 +9,82 @@ If you did not complete lab 4.6, you can simply copy the solution code from that
 
 ## Lab
 
-Go the Terraform registry (https://registry.terraform.io/search/modules?provider=azurerm) to see what modules are available for creating a Postgresql server.  What do you find?
+Explore the Terraform Registry to understand the available modules for Azure Redis Cache. Specifically, we will use the module from:
 
-The module we want to use in this lab is at:
+* [Claranet Redis Module on Terraform Registry](https://registry.terraform.io/modules/claranet/redis/azurerm/7.7.0)
 
-* https://registry.terraform.io/modules/Azure/postgresql/azurerm/2.1.0
+Select version 7.7.0 for this lab.
 
-Be sure to select version 2.1.0.
+Review the module documentation to understand its usage. Pay special attention to the required and optional input arguments. This module provides an abstraction over the Azure Redis Cache resource, simplifying its creation and configuration.
 
-Look through the module documentation to see how it should be used.  Look at the inputs section to see what input arguments are required versus optional.  Notice how this one module can create many of the resources you have in your database.tf file.  The module therefore provides a level of abstraction.
+Create a new file named `redis.tf` in your Terraform project.
 
-Open database.tf
+Using the module documentation as a reference, add a module configuration to create an Azure Redis Cache instance. Although this module supports various configurations, we will focus on a basic setup for this lab.
 
-Using the module documentation as a guide, add a call to the module to create a database server and database instance.  Although the module could be used to create firewall rules, for the sake of this lab, we will still create the firewall rules separately.
+Key points for the module configuration:
 
-* Specify the version explicitly as "2.1.0" (since that is what this lab was based on).
+* Explicitly specify the version as "7.7.0".
+* Use inputs from your current Terraform configuration where applicable, ensuring consistency with your existing resources.
+* Append a unique suffix to the `client_name` for the Redis instance to avoid naming conflicts.
+* Exclude settings from the module that were not present in your existing resources.
 
-* Most of the arguments for the module can be copied directly from the existing resources.  The similar naming is a sign of a well-designed module to avoid confusion.
-
-* To avoid conflicts with the name of the existing database server, append an extra suffix "-mod" to the server_name argument in the module to differentiate it.
-
-* Omit module arguments in the documentation that were not set in the existing resources.
-
-Compare your code to the solution below (or in the database.tf file in the solution folder).
+After setting up the module, compare your code to the solution provided below.
 
 <details>
+<summary>Click to see the solution for the Redis module configuration</summary>
 
- _<summary>Click to see solution for module call</summary>_
+```hcl
+module "redis" {
+  source  = "claranet/redis/azurerm"
+  version = "7.7.0"
 
-```
-module "database-server" {
-  source  = "Azure/postgresql/azurerm"  #from Terraform registry
-  version = "2.1.0"
+  client_name              = "aztf-labs-redis-${random_integer.suffix.result}"
+  environment              = "labs"
+  location                 = local.region
+  location_short           = "use"
+  stack                    = "labs"
+  resource_group_name      = azurerm_resource_group.lab.name
+  logs_destinations_ids    = []
 
- location                         = local.region
-  resource_group_name              = azurerm_resource_group.lab.name
-  server_name                      = "aztf-labs-psqlserver-${random_integer.suffix.result}-mod"
-  sku_name                         = "B_Gen5_1"
-  server_version                   = "11"
-  storage_mb                       = var.db_storage
-  ssl_enforcement_enabled          = false
-  ssl_minimal_tls_version_enforced = "TLSEnforcementDisabled"
+  capacity                 = 1
+  cluster_shard_count      = 2
+  data_persistence_enabled = false
+  allowed_cidrs            = ["10.0.0.0/16"]
 
-  administrator_login     = "psqladmin"
-  administrator_password  = azurerm_key_vault_secret.lab-db-pwd.value
-
-  db_names                = ["aztf-labs-db"]
-  db_charset              = "UTF8"
-  db_collation            = "English_United States.1252"
-
-  tags = local.common_tags
+  extra_tags               = local.common_tags
 }
 ```
 </details>
 
-In the <code>azurerm_postgresql_firewall_rule</code> resource, update the server name argument to reference the module instead of the server resource.  Look at the module documentation to see what the exported attribute for the server name is.  Be sure to include the "module" prefix in the reference.
+### Terraform Commands
 
-<details>
+1. Initialize your Terraform configuration:
+   ```
+   terraform init
+   ```
+2. Validate your configuration:
+   ```
+   terraform validate
+   ```
+3. Plan and review the changes:
+   ```
+   terraform plan
+   ```
+4. Apply the changes:
+   ```
+   terraform apply
+   ```
 
- _<summary>Click to see solution for reference to module server name</summary>_
+### Discussion Questions
 
-```
-  server_name         = module.database-server.server_name
-```
-</details>
+1. Why is `terraform init` necessary when adding a new module?
+2. How does using a module simplify the process of creating an Azure Redis Cache?
+3. What are the benefits of appending a unique suffix to resource names in a shared environment?
 
-Once you have the module configured, delete or comment out the existing two resources:
-  * azurerm_postgresql_server
-  * azurerm_postgresql_database
+---
 
-Open outputs.tf
+This lab section encourages students to explore Terraform modules and apply them in a practical scenario. It also includes instructions for validating and applying the configuration, along with discussion questions to deepen their understanding of Terraform modules and best practices.
 
-Update the database endpoint output value in outputs.tf to return the db server endpoint from the module.  Look at the documentation to see what the reference should look like.
+---
 
 
-<details>
-
- _<summary>Click to see solution for module server endpoint output</summary>_
-
-```
-output "db-server-endpoint" {
-  value = module.database-server.server_fqdn
-}
-```
-</details>
-
-If you try running terraform validate at this point, you would get an error that you must first run terraform init.  Do you know why you would need to call init?
-
-Run terraform init:
-```
-terraform init
-```
-
-![Terraform Validate - Run init for module](./images/tf-plan-init-error.png "Terraform Validate - Run init for module")
-
-Run terraform validate:
-```
-terraform validate
-```
-
-Run terraform plan.  You should see that Terraform will destroy the former database and re-create a new database, as well as replace the firewall rules.  Can you tell why from looking at the plan?
-```
-terraform plan
-```
-
-![Terraform Plan - Database module](./images/tf-plan-db-module1.png "Terraform Plan - Database module")
-
-![Terraform Plan - Database module](./images/tf-plan-db-module2.png "Terraform Plan - Database module")
-
-Run terraform apply:
-```
-terraform apply
-```
