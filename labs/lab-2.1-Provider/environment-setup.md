@@ -1,6 +1,6 @@
 For the labs in this class you will need to be logged into the Azure portal.  The instructor should have sent you credentials to log in.
 
-Go to http://portal.azure.com. You will be redirected to a login page for Azure.
+Go to https://portal.azure.com. You will be redirected to a login page for Azure.
 
 If there are any accounts listed on the login page, you should ignore them since those will not provide you with the necessary access for this class.  Click "Use another account", which will ask for an email address as your login.  Use the email address that was sent to you for the class.  Click "Next" and enter the password that was sent to you for the class.  Click "Submit", and you should be taken to the main Azure Portal page.
 
@@ -30,4 +30,4 @@ You are now set to proceed with the labs for the class.
 
 We will also be using Terraform Cloud in later labs.  The instructor should have sent you credentials to log in.
 
-Go to [https://apps.terraform.io](https://apps.terraform.io). You will be redirected to a login page for Terraform Cloud.
+Go to [https://app.terraform.io](https://apps.terraform.io). You will be redirected to a login page for Terraform Cloud.
