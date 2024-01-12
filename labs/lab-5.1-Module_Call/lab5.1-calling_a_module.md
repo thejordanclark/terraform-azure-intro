@@ -83,8 +83,50 @@ module "redis" {
 
 ---
 
-This lab section encourages students to explore Terraform modules and apply them in a practical scenario. It also includes instructions for validating and applying the configuration, along with discussion questions to deepen their understanding of Terraform modules and best practices.
+## Working with Private Terraform Modules
 
----
+### Objective:
+- Learn how to use private modules hosted on Terraform Cloud.
+- Modify the existing Terraform configuration to use a private version of the Redis module.
 
+### Explore Terraform Cloud's Private Module Registry
+
+Terraform Cloud offers the capability to host private modules, making them accessible only to your organization. This feature is particularly useful for custom modules tailored to your organization's specific needs.
+
+1. **Explore Private Modules**: Log in to your Terraform Cloud account and navigate to your organization's private module registry. 
+
+2. **Locate the Redis Module**: In the Terraform Cloud web interface, search for the "redis" module within the private module registry. Note the differences between the public and private versions of the module.
+
+### Update Terraform Configuration
+
+Now, update your Terraform configuration to use the private version of the Redis module hosted on Terraform Cloud.
+
+1. **Modify `redis.tf`**: Change the source of the Redis module to point to the private module hosted on Terraform Cloud. The new source should be something like `"app.terraform.io/ABC-Labs/redis/azurerm"`. Make sure to use the correct organization name and module path.
+
+   ```hcl
+   module "redis" {
+     source  = "app.terraform.io/ABC-Labs/redis/azurerm"
+     version = "0.1.0"
+
+     # ... (rest of the configuration remains the same)
+   }
+   ```
+
+2. **Apply the Changes**: 
+   - Run `terraform init` to initialize the new module source.
+   - Validate and apply your configuration as usual.
+
+### Terraform Commands
+
+```bash
+terraform init
+terraform validate
+terraform plan
+terraform apply
+```
+
+### Discussion and Reflection
+
+- Discuss the benefits of using private modules in Terraform Cloud. How does it enhance module management and security within an organization?
+- Reflect on the process of transitioning from a public module to a private module. What considerations are important when making this transition?
 
