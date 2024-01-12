@@ -35,7 +35,6 @@ resource "azurerm_lb_backend_address_pool" "lab" {
 }
 
 resource "azurerm_lb_probe" "lab" {
-  resource_group_name = var.resource_group_name
   loadbalancer_id     = azurerm_lb.lab.id
   name                = "http-running-probe"
   protocol            = "Http"
@@ -44,7 +43,6 @@ resource "azurerm_lb_probe" "lab" {
 }
 
 resource "azurerm_lb_rule" "lab" {
-  resource_group_name            = var.resource_group_name
   loadbalancer_id                = azurerm_lb.lab.id
   name                           = "mod-aztf-labs-lb-rule"
   protocol                       = "Tcp"
