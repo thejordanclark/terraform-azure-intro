@@ -75,6 +75,8 @@ module "redis" {
    terraform apply
    ```
 
+:bangbang: NOTE: Azure takes a while to create the Redis cache.  Expect it to be 10 minutes or more.
+
 ### Discussion Questions
 
 1. Why is `terraform init` necessary when adding a new module?
