@@ -39,7 +39,7 @@ Edit “main.tf” to add a backend for Azure.  Add the following as a sub-block
   }
 ```
 
-Your resulting terraform block should look as follows:
+Your resulting terraform block should look as follows, __replace the "labs-XX" with your assigned student number.__  _Example: Student00 would be "labs-00"_:
 ```
 terraform {
   required_providers {
